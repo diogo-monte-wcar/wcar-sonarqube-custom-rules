@@ -16,14 +16,22 @@ public class LogCountCompute implements MeasureComputer {
   @Override
   public void compute(MeasureComputerContext measureComputerContext) {
     if (measureComputerContext.getComponent().getType() != Component.Type.FILE) {
-      int sum = 0;
-      int count = 0;
-      for (Measure child : measureComputerContext.getChildrenMeasures(LogsMetrics.TOTAL.key())) {
-        sum += child.getIntValue();
-        count++;
-      }
-      int average = count == 0 ? 0 : sum / count;
-      measureComputerContext.addMeasure(LogsMetrics.TOTAL.key(), average);
+
+      int totalCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL.key());
+      int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
+      int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
+
+      measureComputerContext.addMeasure(LogsMetrics.TOTAL.key(), totalCount);
+      //measureComputerContext.addMeasure(LogsMetrics.INFO.key(), infoCount);
+      //measureComputerContext.addMeasure(LogsMetrics.DEBUG.key(), debugCount);
     }
+  }
+
+  private int sumTotal(MeasureComputerContext measureComputerContext, String key) {
+    int totalSum = 0;
+    for (Measure child : measureComputerContext.getChildrenMeasures(key)) {
+      totalSum += child.getIntValue();
+    }
+    return totalSum;
   }
 }

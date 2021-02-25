@@ -20,6 +20,7 @@ public class LogCountSensor implements Sensor {
   public void execute(SensorContext sensorContext) {
     for (InputFile inputFile : sensorContext.fileSystem().inputFiles(sensorContext.fileSystem().predicates().hasLanguage("java"))) {
 
+
       String fileContent = "";
       try {
         fileContent = inputFile.contents();
