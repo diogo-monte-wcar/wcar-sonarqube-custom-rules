@@ -40,7 +40,7 @@ import org.sonar.squidbridge.annotations.RuleTemplate;
  * Declare rule metadata in server repository of rules. 
  * That allows to list the rules in the page "Rules".
  */
-public class MyJavaRulesDefinition implements RulesDefinition {
+public class JavaRulesDefinition implements RulesDefinition {
 
   // don't change that because the path is hard coded in CheckVerifier
   private static final String RESOURCE_BASE_PATH = "/org/sonar/l10n/java/rules/squid";
@@ -88,7 +88,7 @@ public class MyJavaRulesDefinition implements RulesDefinition {
   }
 
   private void addMetadata(NewRule rule, String metadataKey) {
-    URL resource = MyJavaRulesDefinition.class.getResource(RESOURCE_BASE_PATH + "/" + metadataKey + "_java.json");
+    URL resource = JavaRulesDefinition.class.getResource(RESOURCE_BASE_PATH + "/" + metadataKey + "_java.json");
     if (resource != null) {
       RuleMetatada metatada = gson.fromJson(readResource(resource), RuleMetatada.class);
       rule.setSeverity(metatada.defaultSeverity.toUpperCase(Locale.US));
@@ -104,7 +104,7 @@ public class MyJavaRulesDefinition implements RulesDefinition {
   }
 
   private static void addHtmlDescription(NewRule rule, String metadataKey) {
-    URL resource = MyJavaRulesDefinition.class.getResource(RESOURCE_BASE_PATH + "/" + metadataKey + "_java.html");
+    URL resource = JavaRulesDefinition.class.getResource(RESOURCE_BASE_PATH + "/" + metadataKey + "_java.html");
     if (resource != null) {
       rule.setHtmlDescription(readResource(resource));
     }

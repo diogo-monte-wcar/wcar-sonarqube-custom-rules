@@ -9,6 +9,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.check.Rule;
 
+@SuppressWarnings("ALL")
 public class LogCountSensor implements Sensor {
 
   @Override

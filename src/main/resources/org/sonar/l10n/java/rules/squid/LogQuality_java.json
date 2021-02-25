@@ -1,5 +1,5 @@
 {
-  "title": "No info()",
+  "title": "Logger methods should not be called with only a string literal",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
