@@ -16,22 +16,28 @@ public class LogsMetrics implements Metrics {
   static final Metric TOTAL = new Metric
       .Builder(LOGS_TOTAL_COUNT, "Count of logs (all levels)", Metric.ValueType.INT)
       .setDescription("Total Logs in project")
+      .setDirection(Metric.DIRECTION_BETTER)
       .setQualitative(false)
-      .setDomain(CoreMetrics.DOMAIN_MAINTAINABILITY)
+      .setDomain(CoreMetrics.DOMAIN_GENERAL)
+      .setDeleteHistoricalData(true)
       .create();
 
   static final Metric INFO = new Metric
       .Builder(LOGS_INFO_COUNT, "Count of info logs", Metric.ValueType.INT)
       .setDescription("Total info logs in project")
+      .setDirection(Metric.DIRECTION_BETTER)
       .setQualitative(false)
-      .setDomain(CoreMetrics.DOMAIN_MAINTAINABILITY)
+      .setDomain(CoreMetrics.DOMAIN_GENERAL)
+      .setDeleteHistoricalData(true)
       .create();
 
   static final Metric DEBUG = new Metric
       .Builder(LOGS_DEBUG_COUNT, "Count of debug logs", Metric.ValueType.INT)
       .setDescription("Total debug ogs in project")
+      .setDirection(Metric.DIRECTION_BETTER)
       .setQualitative(false)
-      .setDomain(CoreMetrics.DOMAIN_MAINTAINABILITY)
+      .setDomain(CoreMetrics.DOMAIN_GENERAL)
+      .setDeleteHistoricalData(true)
       .create();
 
   @Override
