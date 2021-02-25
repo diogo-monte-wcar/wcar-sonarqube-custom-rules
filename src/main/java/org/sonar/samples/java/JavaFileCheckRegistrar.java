@@ -31,7 +31,7 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
  * This class is a batch extension by implementing the {@link org.sonar.plugins.java.api.CheckRegistrar} interface.
  */
 @SonarLintSide
-public class MyJavaFileCheckRegistrar implements CheckRegistrar {
+public class JavaFileCheckRegistrar implements CheckRegistrar {
 
   /**
    * Register the classes that will be used to instantiate checks during analysis.
@@ -39,7 +39,7 @@ public class MyJavaFileCheckRegistrar implements CheckRegistrar {
   @Override
   public void register(RegistrarContext registrarContext) {
     // Call to registerClassesForRepository to associate the classes with the correct repository key
-    registrarContext.registerClassesForRepository(MyJavaRulesDefinition.REPOSITORY_KEY, checkClasses(), testCheckClasses());
+    registrarContext.registerClassesForRepository(JavaRulesDefinition.REPOSITORY_KEY, checkClasses(), testCheckClasses());
   }
 
   /**

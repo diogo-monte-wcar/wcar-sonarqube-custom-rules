@@ -4,6 +4,8 @@ import org.sonar.api.ce.measure.Component;
 import org.sonar.api.ce.measure.Measure;
 import org.sonar.api.ce.measure.MeasureComputer;
 
+import java.util.stream.StreamSupport;
+
 public class LogCountCompute implements MeasureComputer {
 
   @Override
@@ -13,27 +15,27 @@ public class LogCountCompute implements MeasureComputer {
         .build();
   }
 
-  @Override
-  public void compute(MeasureComputerContext measureComputerContext) {
-    if (measureComputerContext.getComponent().getType() != Component.Type.FILE) {
+    @Override
+    public void compute(MeasureComputerContext ctx) {
+        if (ctx.getComponent().getType() != Component.Type.FILE) {
 
-      int totalFilesLinesCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL_FILE_LINES.key());
-      int totalCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL.key());
-      int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
-      int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
+            int totalFilesLinesCount = sumTotal(ctx, LogsMetrics.TOTAL_FILE_LINES.key());
+            int totalCount = sumTotal(ctx, LogsMetrics.TOTAL.key());
+            int infoCount = sumTotal(ctx, LogsMetrics.INFO.key());
+            int debugCount = sumTotal(ctx, LogsMetrics.DEBUG.key());
 
-      measureComputerContext.addMeasure(LogsMetrics.TOTAL_FILE_LINES.key(), totalFilesLinesCount);
-      measureComputerContext.addMeasure(LogsMetrics.TOTAL.key(), totalCount);
-      measureComputerContext.addMeasure(LogsMetrics.INFO.key(), infoCount);
-      measureComputerContext.addMeasure(LogsMetrics.DEBUG.key(), debugCount);
+            ctx.addMeasure(LogsMetrics.TOTAL_FILE_LINES.key(), totalFilesLinesCount);
+            ctx.addMeasure(LogsMetrics.TOTAL.key(), totalCount);
+            ctx.addMeasure(LogsMetrics.INFO.key(), infoCount);
+            ctx.addMeasure(LogsMetrics.DEBUG.key(), debugCount);
+        }
     }
-  }
 
-  private int sumTotal(MeasureComputerContext measureComputerContext, String key) {
-    int totalSum = 0;
-    for (Measure child : measureComputerContext.getChildrenMeasures(key)) {
-      totalSum += child.getIntValue();
+    private int sumTotal(MeasureComputerContext ctx, String key) {
+        return StreamSupport
+                .stream(ctx.getChildrenMeasures(key).spliterator(), false)
+                .mapToInt(Measure::getIntValue)
+                .sum();
     }
-    return totalSum;
-  }
+
 }

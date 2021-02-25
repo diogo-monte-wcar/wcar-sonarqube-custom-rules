@@ -28,7 +28,7 @@ public class MyCustomCheckTest {
   public void detected() {
 
     // Use an instance of the check under test to raise the issue.
-    MyCustomRule check = new MyCustomRule();
+    LogPercentageRule check = new LogPercentageRule();
 
     // Verifies that the check will raise the adequate issues with the expected message.
     // In the test file, lines which should raise an issue have been commented out

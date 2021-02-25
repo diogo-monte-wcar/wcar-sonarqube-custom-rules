@@ -18,8 +18,8 @@ import java.util.Set;
 @SuppressWarnings("UnstableApiUsage")
 @Rule(
     key = "LogQuality",
-    name = "Logging",
-    description = "logging",
+    name = "Quality of logs",
+    description = "Rule for quality of logs",
     priority = Priority.INFO,
     tags = {"log"})
 public class LogQualityRule extends IssuableSubscriptionVisitor {
@@ -29,6 +29,9 @@ public class LogQualityRule extends IssuableSubscriptionVisitor {
         return ImmutableList.of(Kind.METHOD_INVOCATION);
     }
 
+    private static final Set<String> LoggingMemberFunctions = new HashSet<>(Arrays.asList("info", "debug", "error"));
+
+
     @Override
     @ParametersAreNonnullByDefault
     public void visitNode(Tree tree) {
@@ -37,33 +40,20 @@ public class LogQualityRule extends IssuableSubscriptionVisitor {
         if (method.methodSelect().kind() != Kind.MEMBER_SELECT) return;
 
         MemberSelectExpressionTree memberSelectTree = (MemberSelectExpressionTree) method.methodSelect();
+        if (memberSelectTree.expression().kind() != Kind.IDENTIFIER) return;
 
-        if (memberSelectTree.expression().kind() == Kind.IDENTIFIER) {
-            String exprTypeName = memberSelectTree.expression().symbolType().name();
-            Set<String> validMembers = new HashSet<>(Arrays.asList("info", "debug", "error"));
-            String identifierName = memberSelectTree.identifier().name();
+        String exprTypeName = memberSelectTree.expression().symbolType().name();
+        String identifierName = memberSelectTree.identifier().name();
 
-            if (!(exprTypeName.equals("Logger") && validMembers.contains(identifierName))) return;
-        } else {
-            // Maybe TODO ?
-            return;
-        }
+        if (!(exprTypeName.equals("Logger") && LoggingMemberFunctions.contains(identifierName))) return;
 
         // OK, we have a logging statement
         if (method.arguments().size() == 1) {
             Tree arg = method.arguments().get(0);
-//            // String literal
+
             if (arg.kind() == Kind.STRING_LITERAL) {
                 reportIssue(tree, "Avoid logging only a string literal.");
-                return;
             }
         }
-
-//        String name = method.symbol().name();
-//        System.out.println("Called method with name: " + name);
-
-//        if (name.equals("info")) {
-//            reportIssue(tree, "Called info!");
-//        }
     }
 }

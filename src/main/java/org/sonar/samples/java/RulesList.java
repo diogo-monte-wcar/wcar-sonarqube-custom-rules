@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import org.sonar.plugins.java.api.JavaCheck;
 import org.sonar.samples.java.checks.LogQualityRule;
-import org.sonar.samples.java.checks.MyCustomRule;
+import org.sonar.samples.java.checks.LogPercentageRule;
 
 public final class RulesList {
 
@@ -41,7 +41,7 @@ public final class RulesList {
 
   public static List<Class<? extends JavaCheck>> getJavaChecks() {
     return Collections.unmodifiableList(Arrays.asList(
-            MyCustomRule.class,
+            LogPercentageRule.class,
             LogQualityRule.class
     ));
   }

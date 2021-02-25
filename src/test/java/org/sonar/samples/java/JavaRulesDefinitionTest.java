@@ -22,7 +22,6 @@ package org.sonar.samples.java;
 import org.junit.Test;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction.Type;
-import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Param;
 import org.sonar.api.server.rule.RulesDefinition.Repository;
@@ -30,29 +29,20 @@ import org.sonar.api.server.rule.RulesDefinition.Rule;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class MyJavaRulesDefinitionTest {
+public class JavaRulesDefinitionTest {
 
   @Test
   public void test() {
-    MyJavaRulesDefinition rulesDefinition = new MyJavaRulesDefinition();
+    JavaRulesDefinition rulesDefinition = new JavaRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
-    RulesDefinition.Repository repository = context.repository(MyJavaRulesDefinition.REPOSITORY_KEY);
+    RulesDefinition.Repository repository = context.repository(JavaRulesDefinition.REPOSITORY_KEY);
 
     assertThat(repository.name()).isEqualTo("Wireless Custom Repository");
     assertThat(repository.language()).isEqualTo("java");
     assertThat(repository.rules()).hasSize(RulesList.getChecks().size());
 
-    assertRuleProperties(repository);
     assertAllRuleParametersHaveDescription(repository);
-  }
-
-  private void assertRuleProperties(Repository repository) {
-    Rule rule = repository.rule("MyCustom");
-    assertThat(rule).isNotNull();
-    assertThat(rule.name()).isEqualTo("Title of MyCustom");
-    assertThat(rule.debtRemediationFunction().type()).isEqualTo(Type.CONSTANT_ISSUE);
-    assertThat(rule.type()).isEqualTo(RuleType.CODE_SMELL);
   }
 
   private void assertAllRuleParametersHaveDescription(Repository repository) {
