@@ -11,6 +11,9 @@ import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
 @Rule(key = "MyCustom")
 public class MyCustomRule extends BaseTreeVisitor implements JavaFileScanner {
 
+  Pattern infoPattern = Pattern.compile("(LOGGER.info\\(.*\\);)");
+  Pattern debugPattern = Pattern.compile("(LOGGER.debug\\(.*\\);)");
+
   @Override
   public void scanFile(JavaFileScannerContext context) {
     if (context.getFileLines().isEmpty()) {
@@ -18,15 +21,29 @@ public class MyCustomRule extends BaseTreeVisitor implements JavaFileScanner {
     }
 
     int totalLinesCount = context.getFileLines().size();
+
+    int infoLogCount = countLogLevelInFile(infoPattern, context.getFileContent());
+    int debugLogCount = countLogLevelInFile(debugPattern, context.getFileContent());
+
+    int totalLogCount = infoLogCount + debugLogCount;
+
+    Matcher matcher = infoPattern.matcher(context.getFileContent());
+    while (matcher.find()) {
+      ++totalLogCount;
+    }
+
+    if (totalLogCount > 0) {
+      double logLinesPercentage = ((double) totalLogCount / totalLinesCount) * 100;
+      context.reportIssue(this, context.getTree(), String.format("Logging ration if high files: %d - %.2f", totalLogCount, logLinesPercentage));
+    }
+  }
+
+  private int countLogLevelInFile(Pattern logPattern, String fileContent) {
+    Matcher matcher = logPattern.matcher(fileContent);
     int infoLogCount = 0;
-    Pattern pattern = Pattern.compile("(LOGGER.info\\(.*\\);)");
-    Matcher matcher = pattern.matcher(context.getFileContent());
     while (matcher.find()) {
       ++infoLogCount;
     }
-    if (infoLogCount > 0) {
-      double percentage = (double) infoLogCount / totalLinesCount;
-      context.reportIssue(this, context.getTree(), String.format("Log count: %d - %.2f", infoLogCount, percentage));
-    }
+    return infoLogCount;
   }
 }

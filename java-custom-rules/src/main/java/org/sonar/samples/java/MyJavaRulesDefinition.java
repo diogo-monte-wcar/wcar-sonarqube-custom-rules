@@ -53,7 +53,7 @@ public class MyJavaRulesDefinition implements RulesDefinition {
   public void define(Context context) {
     NewRepository repository = context
       .createRepository(REPOSITORY_KEY, "java")
-      .setName("MyCompany Custom Repository");
+      .setName("Wireless Custom Repository");
 
     for (Class<? extends JavaCheck> check : RulesList.getChecks()) {
       new RulesDefinitionAnnotationLoader().load(repository, check);
