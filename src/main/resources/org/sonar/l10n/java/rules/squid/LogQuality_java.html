@@ -1,0 +1,15 @@
+<p>Logs should (almost) always contain contextualized information. String literals can not contain contextualized information and are therefore usually not useful log output.</p>
+<h2>Non-compliant Code Example</h2>
+<pre>
+private void programFailed(Program program) {
+    LOGGER.info("A program failed!");
+}
+
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+private void programFailed(Program program) {
+    LOGGER.info("The program {} failed!", program.getName());
+}
+</pre>
+LogQualityRule
