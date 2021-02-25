@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.sonar.plugins.java.api.JavaCheck;
+import org.sonar.samples.java.checks.LogQualityRule;
 import org.sonar.samples.java.checks.MyCustomRule;
 
 public final class RulesList {
@@ -40,7 +41,8 @@ public final class RulesList {
 
   public static List<Class<? extends JavaCheck>> getJavaChecks() {
     return Collections.unmodifiableList(Arrays.asList(
-      MyCustomRule.class
+            MyCustomRule.class,
+            LogQualityRule.class
     ));
   }
 
