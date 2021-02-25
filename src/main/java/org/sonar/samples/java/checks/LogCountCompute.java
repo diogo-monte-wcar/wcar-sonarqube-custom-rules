@@ -9,7 +9,7 @@ public class LogCountCompute implements MeasureComputer {
   @Override
   public MeasureComputerDefinition define(MeasureComputerDefinitionContext measureComputerDefinitionContext) {
     return measureComputerDefinitionContext.newDefinitionBuilder()
-        .setOutputMetrics(LogsMetrics.TOTAL.key())
+        .setOutputMetrics(LogsMetrics.TOTAL_FILE_LINES.key(), LogsMetrics.TOTAL.key(), LogsMetrics.INFO.key(), LogsMetrics.DEBUG.key())
         .build();
   }
 
@@ -17,13 +17,15 @@ public class LogCountCompute implements MeasureComputer {
   public void compute(MeasureComputerContext measureComputerContext) {
     if (measureComputerContext.getComponent().getType() != Component.Type.FILE) {
 
+      int totalFilesLinesCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL_FILE_LINES.key());
       int totalCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL.key());
-      //int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
-      //int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
+      int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
+      int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
 
+      measureComputerContext.addMeasure(LogsMetrics.TOTAL_FILE_LINES.key(), totalFilesLinesCount);
       measureComputerContext.addMeasure(LogsMetrics.TOTAL.key(), totalCount);
-      //measureComputerContext.addMeasure(LogsMetrics.INFO.key(), infoCount);
-      //measureComputerContext.addMeasure(LogsMetrics.DEBUG.key(), debugCount);
+      measureComputerContext.addMeasure(LogsMetrics.INFO.key(), infoCount);
+      measureComputerContext.addMeasure(LogsMetrics.DEBUG.key(), debugCount);
     }
   }
 

@@ -9,9 +9,19 @@ import org.sonar.api.measures.Metrics;
 
 public class LogsMetrics implements Metrics {
 
+  private static final String TOTAL_LINES_COUNT = "lines_total_count";
   private static final String LOGS_TOTAL_COUNT = "logs_total_count";
   private static final String LOGS_INFO_COUNT = "logs_info_count";
   private static final String LOGS_DEBUG_COUNT = "logs_debug_count";
+
+  static final Metric TOTAL_FILE_LINES = new Metric
+      .Builder(TOTAL_LINES_COUNT, "Total number of lines", Metric.ValueType.INT)
+      .setDescription("Total number of lines in java files")
+      .setDirection(Metric.DIRECTION_BETTER)
+      .setQualitative(false)
+      .setDomain(CoreMetrics.DOMAIN_GENERAL)
+      .setDeleteHistoricalData(true)
+      .create();
 
   static final Metric TOTAL = new Metric
       .Builder(LOGS_TOTAL_COUNT, "Count of logs (all levels)", Metric.ValueType.INT)
@@ -42,6 +52,6 @@ public class LogsMetrics implements Metrics {
 
   @Override
   public List<Metric> getMetrics() {
-    return Arrays.asList(TOTAL, INFO, DEBUG);
+    return Arrays.asList(TOTAL_FILE_LINES, TOTAL, INFO, DEBUG);
   }
 }

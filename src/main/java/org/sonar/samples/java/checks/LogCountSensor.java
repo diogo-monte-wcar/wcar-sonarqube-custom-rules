@@ -20,7 +20,6 @@ public class LogCountSensor implements Sensor {
   public void execute(SensorContext sensorContext) {
     for (InputFile inputFile : sensorContext.fileSystem().inputFiles(sensorContext.fileSystem().predicates().hasLanguage("java"))) {
 
-
       String fileContent = "";
       try {
         fileContent = inputFile.contents();
@@ -31,6 +30,12 @@ public class LogCountSensor implements Sensor {
       int infoCount = LogHelper.countInfoLogs(fileContent);
       int debugCount = LogHelper.countDebugLogs(fileContent);
       int totalCount = infoCount + debugCount;
+
+      sensorContext.newMeasure()
+          .withValue(inputFile.lines())
+          .forMetric(LogsMetrics.TOTAL_FILE_LINES)
+          .on(inputFile)
+          .save();
 
       sensorContext.newMeasure()
           .withValue(totalCount)
