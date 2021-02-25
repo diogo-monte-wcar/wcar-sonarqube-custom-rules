@@ -18,8 +18,8 @@ public class LogCountCompute implements MeasureComputer {
     if (measureComputerContext.getComponent().getType() != Component.Type.FILE) {
 
       int totalCount = sumTotal(measureComputerContext, LogsMetrics.TOTAL.key());
-      int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
-      int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
+      //int infoCount = sumTotal(measureComputerContext, LogsMetrics.INFO.key());
+      //int debugCount = sumTotal(measureComputerContext, LogsMetrics.DEBUG.key());
 
       measureComputerContext.addMeasure(LogsMetrics.TOTAL.key(), totalCount);
       //measureComputerContext.addMeasure(LogsMetrics.INFO.key(), infoCount);
